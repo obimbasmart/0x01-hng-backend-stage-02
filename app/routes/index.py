@@ -28,13 +28,14 @@ def get_client_metadata(longitude: str, latitude: str) -> str:
 
 @api_routes.route("/hello")
 def greet():
+    ip = request.headers.get('X-Real-IP')
     visitor_name = request.args.get("visitor_name")
-    longitude, latitude = get_client_coord(request.remote_addr)
+    longitude, latitude = get_client_coord(ip)
 
     city, temp = get_client_metadata(longitude, latitude)
 
     return jsonify({
-        "client_ip": request.remote_addr,
+        "client_ip": ip,
         "location": city,
         "greeting": f"Hello, {visitor_name}!, the temperature is {temp} degrees Celcius in {city}"
     })
